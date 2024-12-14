@@ -1,0 +1,11 @@
+{
+  "name": "redis-file-monitor",
+  "version": "0.0.1",
+  "description": "Monitor CWD for new *.redis files to pipe to `| redis-cli`",
+  "bin": {
+    "redis-file-monitor": "bin/redis-file-monitor"
+  },
+  "keywords": ["redis","monitor","*.redis"],
+  "author": "Wil Moore III <Wil.Moore@wilmoore.com>",
+  "license": "MIT"
+}
