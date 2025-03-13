@@ -1,5 +1,3 @@
-![GitHub release](https://img.shields.io/github/v/release/wilmoore/redis-file-monitor)
-![Build Status](https://img.shields.io/github/actions/workflow/status/wilmoore/redis-file-monitor/ci.yml)
 ![License](https://img.shields.io/github/license/wilmoore/redis-file-monitor)
 ![Issues](https://img.shields.io/github/issues/wilmoore/redis-file-monitor)
 
@@ -81,7 +79,3 @@ git clone https://github.com/wilmoore/redis-file-monitor.git
 cd redis-file-monitor
 make
 ```
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
