@@ -5,23 +5,17 @@
 
 # redis-file-monitor
 
-**redis-file-monitor** is a lightweight CLI tool that continuously monitors the current working directory (CWD) for new `.redis` files and automatically pipes their contents to `redis-cli`. This enables seamless execution of Redis commands as soon as new `.redis` script files are created.
+**redis-file-monitor** is a lightweight CLI tool that continuously monitors the current working directory (CWD) for new and updated `.redis` files and automatically pipes their contents to `redis-cli`.
 
 ## Features
 
-- **Automatic Execution**: Detects new `.redis` files and pipes them to `redis-cli` instantly.
-- **Lightweight & Efficient**: Minimal system resource usage.
-- **Simple & Portable**: Works on Linux, macOS, and Windows (via WSL or appropriate shell environment).
+- **Automatic Execution**: Detects new `.redis` files in `CWD` and immediately pipes them to `redis-cli`.
+- **Lightweight**: Built using Rust for high performance and minimal system resource usage.
+- **Cross-Platform**: Works on Linux, macOS, and Windows (via WSL or an appropriate shell environment).
+- **Configurable**: Environment variables allow customization of the Redis CLI path.
 
 ## Installation
-
-Clone the repository and build the binary:
-
-```sh
-git clone https://github.com/wilmoore/redis-file-monitor.git
-cd redis-file-monitor
-make install  # or follow manual build instructions
-```
+> TBD...
 
 ## Usage
 
@@ -58,16 +52,25 @@ You can customize behavior using environment variables:
 | Variable | Description | Default |
 |----------|-------------|---------|
 | `REDIS_CLI_PATH` | Path to `redis-cli` binary | `redis-cli` (assumes in `PATH`) |
-| `WATCH_DIRECTORY` | Directory to monitor | Current directory |
-| `FILE_EXTENSION` | Extension of files to monitor | `.redis` |
 
 Example:
 
 ```sh
 export REDIS_CLI_PATH=/usr/local/bin/redis-cli
-export WATCH_DIRECTORY=/var/redis/scripts
 redis-file-monitor
 ```
+
+## Internals
+
+- Uses `notify` to monitor file system changes.
+- Uses `tokio` for async event handling.
+- Gracefully handles empty files to prevent unnecessary execution.
+- Uses a channel (`tokio::sync::mpsc::channel`) to process events efficiently.
+- Executes `.redis` files using a shell command (`sh -c "cat filename | redis-cli"`).
+
+## Contributing
+
+We welcome contributions! Please submit pull requests and report issues via [GitHub Issues](https://github.com/wilmoore/redis-file-monitor/issues).
 
 ## Development
 
@@ -76,17 +79,9 @@ To contribute or modify the project, clone the repository and set up your enviro
 ```sh
 git clone https://github.com/wilmoore/redis-file-monitor.git
 cd redis-file-monitor
-make build  # Compile the project
+make
 ```
-
-## Contributing
-
-We welcome contributions! Please submit pull requests and report issues via [GitHub Issues](https://github.com/wilmoore/redis-file-monitor/issues).
 
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
-## Authors
-
-Created and maintained by [Wil Moore III](https://github.com/wilmoore).
