@@ -8,12 +8,17 @@
 - **Cross-Platform**: Works on Linux, macOS, and Windows (via WSL or an appropriate shell environment).
 - **Configurable**: Environment variables allow customization of the Redis CLI path.
 
+### Internals
+
+- Uses `notify` to monitor file system changes.
+- Uses `tokio` for async event handling.
+- Gracefully handles empty files to prevent unnecessary execution.
+- Uses a channel (`tokio::sync::mpsc::channel`) to process events efficiently.
+- Executes `.redis` files using a shell command (`sh -c "cat filename | redis-cli"`).
+
 ### Installation
 
 ###### **From Source**
-
-Clone the repository and build the binary:
-
 ```sh
 git clone https://github.com/wilmoore/redis-file-monitor.git
 cd redis-file-monitor
@@ -25,52 +30,19 @@ make
 Run `redis-file-monitor` in any directory where `.redis` files may be created:
 
 ```sh
-redis-file-monitor
+redis-file-monitor \
+   --log-level debug \
+   --redis-cli-path /usr/local/bin/redis-cli \
+   --watch-dir /var/redis/scripts
 ```
-
-Whenever a new `.redis` file appears, the tool will automatically execute:
-
-```sh
-cat filename.redis | redis-cli
-```
-
-### Example Workflow
-
-1. Start `redis-file-monitor` in a terminal.
-2. Create a `.redis` file with Redis commands:
-   ```sh
-   echo "SET foo bar" > example.redis
-   ```
-3. The command inside `example.redis` is automatically sent to `redis-cli`.
-4. Check the result in Redis:
-   ```sh
-   redis-cli GET foo
-   # Output: "bar"
-   ```
 
 ### Configuration
-
-Customize behavior using command-line flags:
 
 | Flag | Description | Default |
 |------|-------------|---------|
 | `--watch-dir` | Directory to monitor for `.redis` files | Current working directory (CWD) |
 | `--redis-cli-path` | Path to `redis-cli` binary | `redis-cli` (assumes in `PATH`) |
 | `--log-level` | Logging level (`info`, `debug`, `error`) | `info` |
-
-Example:
-
-```sh
-redis-file-monitor --watch-dir /var/redis/scripts --redis-cli-path /usr/local/bin/redis-cli --log-level debug
-```
-
-### Internals
-
-- Uses `notify` to monitor file system changes.
-- Uses `tokio` for async event handling.
-- Gracefully handles empty files to prevent unnecessary execution.
-- Uses a channel (`tokio::sync::mpsc::channel`) to process events efficiently.
-- Executes `.redis` files using a shell command (`sh -c "cat filename | redis-cli"`).
 
 ### Contributing
 
