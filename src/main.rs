@@ -6,7 +6,6 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 use tokio::runtime::Runtime;
 use tracing::{error, info, warn};
-use tracing_subscriber;
 
 /// CLI Arguments
 #[derive(Parser, Debug)]
@@ -77,7 +76,7 @@ async fn watch_directory(dir: &Path, redis_cli: &str) -> Result<()> {
 /// Processes file events
 async fn process_events(rx: &mut tokio::sync::mpsc::Receiver<Event>, redis_cli: &str) {
     while let Some(event) = rx.recv().await {
-        if let Some(path) = event.paths.get(0) {
+        if let Some(path) = event.paths.first() {
             if let EventKind::Modify(notify::event::ModifyKind::Data(
                 notify::event::DataChange::Content,
             )) = event.kind
