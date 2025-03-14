@@ -9,7 +9,16 @@
 - **Configurable**: Environment variables allow customization of the Redis CLI path.
 
 ## Installation
-> TBD...
+
+### **From Source**
+
+Clone the repository and build the binary:
+
+```sh
+git clone https://github.com/wilmoore/redis-file-monitor.git
+cd redis-file-monitor
+make
+```
 
 ## Usage
 
@@ -19,7 +28,7 @@ Run `redis-file-monitor` in any directory where `.redis` files may be created:
 redis-file-monitor
 ```
 
-Whenever a new `.redis` file appears in the directory, the tool will automatically execute:
+Whenever a new `.redis` file appears, the tool will automatically execute:
 
 ```sh
 cat filename.redis | redis-cli
@@ -41,17 +50,18 @@ cat filename.redis | redis-cli
 
 ## Configuration
 
-You can customize behavior using environment variables:
+Customize behavior using command-line flags:
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `REDIS_CLI_PATH` | Path to `redis-cli` binary | `redis-cli` (assumes in `PATH`) |
+| Flag | Description | Default |
+|------|-------------|---------|
+| `--watch-dir` | Directory to monitor for `.redis` files | Current working directory (CWD) |
+| `--redis-cli-path` | Path to `redis-cli` binary | `redis-cli` (assumes in `PATH`) |
+| `--log-level` | Logging level (`info`, `debug`, `error`) | `info` |
 
 Example:
 
 ```sh
-export REDIS_CLI_PATH=/usr/local/bin/redis-cli
-redis-file-monitor
+redis-file-monitor --watch-dir /var/redis/scripts --redis-cli-path /usr/local/bin/redis-cli --log-level debug
 ```
 
 ## Internals
