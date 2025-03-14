@@ -1,4 +1,4 @@
-# redis-file-monitor ![License](https://img.shields.io/github/license/wilmoore/redis-file-monitor?v=1) ![Issues](https://img.shields.io/github/issues/wilmoore/redis-file-monitor)
+# redis-file-monitor ![License](https://img.shields.io/github/license/wilmoore/redis-file-monitor?v=1) ![Issues](https://img.shields.io/github/issues/wilmoore/redis-file-monitor) [![codecov](https://codecov.io/gh/wilmoore/redis-file-monitor/graph/badge.svg?token=MVI2JWFEW5)](https://codecov.io/gh/wilmoore/redis-file-monitor)
 > A CLI To Continuously Monitor the (CWD) for new and updated `*.redis` files to `|` to `redis-cli`
 
 ### Usage
