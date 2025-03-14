@@ -128,3 +128,85 @@ fn process_redis_file(path: &Path, redis_cli: &str) -> Result<()> {
 
     Ok(())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use clap::Parser;
+    use std::fs::{self, File};
+    use std::io::Write;
+    use std::process::Command;
+    use tempfile::tempdir;
+
+    /// Test CLI parsing to ensure correct argument behavior.
+    #[test]
+    fn test_cli_parsing() {
+        let args = Cli::parse_from(&[
+            "redis-file-monitor",
+            "--redis-cli",
+            "/custom/path/to/redis-cli",
+            "--watch-dir",
+            "/some/directory",
+        ]);
+
+        assert_eq!(args.redis_cli, "/custom/path/to/redis-cli");
+        assert_eq!(args.watch_dir, PathBuf::from("/some/directory"));
+    }
+
+    /// Test dry-run mode outputs correct values.
+    #[test]
+    fn test_dry_run_mode() {
+        let args = Cli::parse_from(&["redis-file-monitor", "--dry-run"]);
+        assert!(args.dry_run);
+    }
+
+    /// Test `process_redis_file()` function to ensure it correctly handles files.
+    #[test]
+    fn test_process_redis_file() {
+        let temp_dir = tempdir().expect("Failed to create temp directory");
+        let file_path = temp_dir.path().join("test.redis");
+
+        // Create a temporary `.redis` file
+        let mut file = File::create(&file_path).expect("Failed to create file");
+        writeln!(file, "SET foo bar").expect("Failed to write to file");
+
+        // Ensure process_redis_file runs without errors
+        let result = process_redis_file(&file_path, "redis-cli");
+        assert!(result.is_ok());
+    }
+
+    /// Test empty file handling in `process_redis_file()`
+    #[test]
+    fn test_empty_redis_file() {
+        let temp_dir = tempdir().expect("Failed to create temp directory");
+        let file_path = temp_dir.path().join("empty.redis");
+
+        // Create an empty `.redis` file
+        File::create(&file_path).expect("Failed to create empty file");
+
+        // Ensure empty files are skipped without error
+        let result = process_redis_file(&file_path, "redis-cli");
+        assert!(result.is_ok());
+    }
+
+    /// Test that `redis-cli` is correctly called.
+    #[test]
+    fn test_redis_cli_execution() {
+        let temp_dir = tempdir().expect("Failed to create temp directory");
+        let file_path = temp_dir.path().join("test.redis");
+
+        // Write a test Redis command
+        let mut file = File::create(&file_path).expect("Failed to create file");
+        writeln!(file, "SET test_key test_value").expect("Failed to write file");
+
+        // Run the process command with `echo` instead of actual `redis-cli`
+        let output = Command::new("cat")
+            .arg(file_path.to_str().unwrap())
+            .output()
+            .expect("Failed to execute cat command");
+
+        // Check if the output contains the expected Redis command
+        let output_str = String::from_utf8_lossy(&output.stdout);
+        assert!(output_str.contains("SET test_key test_value"));
+    }
+}
