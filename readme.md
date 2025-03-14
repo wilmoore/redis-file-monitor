@@ -1,14 +1,14 @@
 # redis-file-monitor ![License](https://img.shields.io/github/license/wilmoore/redis-file-monitor?v=1) ![Issues](https://img.shields.io/github/issues/wilmoore/redis-file-monitor)
 > A CLI To Continuously Monitor the (CWD) for new and updated `*.redis` files to pipe to `| redis-cli`
 
-#### Features
+### Features
 
 - **Automatic Execution**: Detects new `.redis` files in `CWD` and immediately pipes them to `redis-cli`.
 - **Lightweight**: Built using Rust for high performance and minimal system resource usage.
 - **Cross-Platform**: Works on Linux, macOS, and Windows (via WSL or an appropriate shell environment).
 - **Configurable**: Environment variables allow customization of the Redis CLI path.
 
-#### Installation
+### Installation
 
 ###### **From Source**
 
@@ -20,7 +20,7 @@ cd redis-file-monitor
 make
 ```
 
-#### Usage
+### Usage
 
 Run `redis-file-monitor` in any directory where `.redis` files may be created:
 
@@ -34,7 +34,7 @@ Whenever a new `.redis` file appears, the tool will automatically execute:
 cat filename.redis | redis-cli
 ```
 
-#### Example Workflow
+### Example Workflow
 
 1. Start `redis-file-monitor` in a terminal.
 2. Create a `.redis` file with Redis commands:
@@ -48,7 +48,7 @@ cat filename.redis | redis-cli
    # Output: "bar"
    ```
 
-#### Configuration
+### Configuration
 
 Customize behavior using command-line flags:
 
@@ -64,7 +64,7 @@ Example:
 redis-file-monitor --watch-dir /var/redis/scripts --redis-cli-path /usr/local/bin/redis-cli --log-level debug
 ```
 
-#### Internals
+### Internals
 
 - Uses `notify` to monitor file system changes.
 - Uses `tokio` for async event handling.
@@ -72,11 +72,11 @@ redis-file-monitor --watch-dir /var/redis/scripts --redis-cli-path /usr/local/bi
 - Uses a channel (`tokio::sync::mpsc::channel`) to process events efficiently.
 - Executes `.redis` files using a shell command (`sh -c "cat filename | redis-cli"`).
 
-#### Contributing
+### Contributing
 
 We welcome contributions! Please submit pull requests and report issues via [GitHub Issues](https://github.com/wilmoore/redis-file-monitor/issues).
 
-#### Development
+### Development
 
 To contribute or modify the project, clone the repository and set up your environment:
 
