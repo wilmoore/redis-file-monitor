@@ -8,7 +8,7 @@ on:
 
 jobs:
   test:
-    name: Run Tests on ${{ matrix.os }}
+    name: Run Tests & Lint on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -22,5 +22,17 @@ jobs:
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
 
+      - name: Run Clippy (Linting)
+        run: cargo clippy -- -D warnings
+
       - name: Run Tests
         run: cargo test --verbose
+
+      - name: Run Code Coverage (Linux Only)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          cargo install cargo-tarpaulin
+          cargo tarpaulin --out Lcov
+          bash <(curl -s https://codecov.io/bash) -f lcov.info
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
