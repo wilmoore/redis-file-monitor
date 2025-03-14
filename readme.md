@@ -15,13 +15,6 @@ redis-file-monitor --log-level debug --redis-cli-path /usr/local/bin/redis-cli -
 | `--redis-cli-path` | Path to `redis-cli` binary | `redis-cli` (assumes in `PATH`) |
 | `--log-level` | Logging level (`info`, `debug`, `error`) | `info` |
 
-### Features
-
-- **Automatic Execution**: Detects new `.redis` files in `CWD` and immediately pipes them to `redis-cli`.
-- **Lightweight**: Built using Rust for high performance and minimal system resource usage.
-- **Cross-Platform**: Works on Linux, macOS, and Windows (via WSL or an appropriate shell environment).
-- **Configurable**: Environment variables allow customization of the Redis CLI path.
-
 ### Installation
 
 ###### **From Source**
