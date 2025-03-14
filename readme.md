@@ -4,10 +4,7 @@
 ### Usage
 
 ```sh
-redis-file-monitor \
-   --log-level debug \
-   --redis-cli-path /usr/local/bin/redis-cli \
-   --watch-dir /var/redis/scripts
+redis-file-monitor --log-level debug --redis-cli-path /usr/local/bin/redis-cli --watch-dir /var/redis/scripts
 ```
 
 ###### Options
