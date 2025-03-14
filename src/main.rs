@@ -11,7 +11,8 @@ fn main() {
     // Get the current working directory
     let watch_dir = std::env::current_dir().expect("Failed to get current working directory");
 
-    info!("Starting Redis file monitor in {:?}", watch_dir);
+    // info!("Starting Redis file monitor in {:?}", watch_dir);
+    eprintln!("Starting Redis file monitor in {:?}", watch_dir);
 
     let runtime = Runtime::new().unwrap();
 
